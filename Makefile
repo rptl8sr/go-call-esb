@@ -39,6 +39,19 @@ test:
 	go vet ./...
 	go test -v ./internal/...
 
+# Test server endpoints
+test-success:
+	# Test the successful endpoint, expecting a 200 OK response
+	curl -i -X PUT -H "Content-Type: application/json" -d '{"api_key": "KEY", "timestamp":1744761600}' http://localhost:8080/api/updatePriceNew | grep "HTTP/1.1 200 OK"
+
+test-error:
+	# Test the error endpoint, expecting a 500 Internal Server Error response
+	curl -i -X PUT http://localhost:8080/api/updatePriceNew/error500 | grep "HTTP/1.1 500 Internal Server Error"
+
+test-noresponse:
+	# Test the no response endpoint. Using timeout to handle no response.
+	curl -m 2 -X PUT http://localhost:8080/api/updatePriceNew/noresponse || true
+
 # YANDEX CLOUD
 yc-zip:
 		zip -r '$(YCF_FUNC_NAME).zip' handler.go go.mod go.sum internal
