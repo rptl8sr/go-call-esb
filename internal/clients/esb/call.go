@@ -25,7 +25,7 @@ func (c *Client) Call(ctx context.Context, endpoint string, t time.Time) error {
 		Timestamp: int(t.Unix()),
 	}
 
-	resp, err := c.httpClient.Put(ctx, u, c.getHeaders(), reqBody)
+	resp, err := c.httpClient.Put(ctx, u, getHeaders(), reqBody)
 	if err != nil {
 		return fmt.Errorf("failed to get stores: %w", err)
 	}
